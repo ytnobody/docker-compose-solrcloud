@@ -1,0 +1,21 @@
+zookeeper:
+  image: jplock/zookeeper
+  tags:
+    - solrcloud
+  ports:
+    - "2181:2181"
+    - "2888:2888"
+    - "3888:3888"
+  target_num_containers: 1
+
+solr:
+  image: solr
+  tags:
+    - solrcloud
+  ports:
+    - "8983:8983"
+  links:
+    - "zookeeper:ZK"
+  command: "bash -c '/opt/solr/bin/solr start -f -z $ZK_PORT_2181_TCP_ADDR:$ZK_PORT_2181_TCP_PORT'"
+  target_num_containers: 2
+
